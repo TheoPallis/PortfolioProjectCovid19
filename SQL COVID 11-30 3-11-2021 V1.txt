@@ -1,0 +1,100 @@
+
+
+PREVIEW FIRST
+
+...
+
+LEGEND :
+STEPS ARE ORDERED BY NUMBERS
+SMALLER STEPS BY NUMBER AND LETTER
+TASKS/GOALS BY LATIN NUMERALS 
+
+
+
+-- STEP 1 : PREVIEW PHASE
+
+
+--1a)VIEW COVID DEATHS, SORTED BY ...
+
+SELECT *
+FROM PortfolioProject..CovidDeaths
+ORDER BY 3,4
+
+--1b)VIEW COVID VACCINATIONS, SORTED BY ...
+SELECT * 
+FROM PortfolioProject..Vaccinations
+ORDER BY 3,4
+
+--1c)SORTED BY LOCATION AND DATE
+SELECT Location, Date, total_cases, new_cases, total_deaths, population --view those columns 
+FROM PortfolioProject..CovidDeaths --from this file
+ORDER BY 1,2 --
+
+--STEP 2 : EXPLORATORY DATA ANALYSIS (FIND PERCENTAGES ...
+
+--I) PERCENTAGE OF TOTAL CASES TO TOTAL DEATHS, SORTED BY LOCATION AND DATE
+
+SELECT Location, Date, total_cases, total_deaths, (total_deaths / total_cases) * 100 as DeathPercentage  --we multiply by * 100 to get total percentage, we create column named DeathPercentage with ...as DeathPercentage 
+FROM PortfolioProject..CovidDeaths
+ORDER BY 1,2
+
+--WE NOTICE THE FOLLOWING TREND : AS THE DATES PASS THE DEATH PERCENTAGE GETS LOWER
+
+
+--II) GET PERCENTAGE OF POPULATION THAT GOT COVID
+
+SELECT Location, Date, total_cases, population, (total_cases / population) * 100 as DiseasePercentage
+FROM PortfolioProject..CovidDeaths
+ORDER BY 1,2
+
+
+--IMPORT THIS TO TABLEAU
+
+
+--III) COUNTRIES WITH HIGHEST INFECTION RATE COMPARED TO POPULATION
+
+--- THEO'S ATTEMPTS 1)SELECT Location, Date, total_cases, population, DiseasePercentage
+FROM PortfolioProject..CovidDeaths
+ORDER BY DiseasePercentage
+
+SELECT Location, Population,DiseasePercentage,
+ MAX (total_cases) as HighestInfectionCount,
+MAX (total_cases / population) * 100 as HighestInfectedPercentage -- The difference between my approach and this is that I chose to sort by descending order whereas here a max function is applied
+FROM PortfolioProject..CovidDeaths
+--GET USA'S CITIES PERCENTAGE
+WHERE Location LIKE %states%
+GROUP BY Location, Population
+ORDER BY DiseasePercentage DESC --;;
+--IV) THEO'S ATTEMPT : 
+a)GET TOTAL DEATHS LAST MONTH IN GREECE
+
+SELECT Date, Location, total_deaths
+FROM PortfolioProject..CovidDeaths
+WHERE LOCATION = "GREECE" AND Date LIKE 10/2021 ;;; -LIKE 10/2021 OR 10-2021 OR ARE BOTH WRONG?
+ORDER BY ...
+
+
+b)GET AVERAGE OF DEATHS LAST SIX MONTHS in Greece ;;;
+
+SELECT Date, Location, total_deaths, AVG(total_deaths) as AverageDeaths,  CAST( GETDATE() AS Today ) 
+FROM PortfolioProject..CovidDeaths
+WHERE LOCATION "GREECE" AND
+
+--;;DATE BETWEEN  3/5/2021 AND Today();;;; 
+-- OTHER WAY ;;;
+
+
+C) GET PERCENTAGE OF COVID DEATHS TO DEATHS IN THE LAST SIX MONTHS IN GREECE
+
+SELECT Date, Location, total_deaths, (total_deaths / dead_population;;) as CovidDeathPercentage --find out how many died from covid in relation to those who died from a general cause
+
+FROM PortfolioProject..CovidDeaths
+WHERE LOCATION "GREECE" AND
+DATE BETWEEN  3/5/2021 AND 3/11/2021
+
+D)GET PERCENTAGE OF VACCINATED IN POPULATION FOR THE LAST SIX MONTHS 
+
+
+E)FIND IF THERE IS A TREND THAT THE MORE PEOPLE GET VACCINATED THE LESSER THE DISEASE PERCENTAGE
+
+F) GET AVERAGE PERCENTAGE OF POPULATION INFECTED IN ALL LOCATIONS
